@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SJ 공부방</title>
+</head>
+<body>
+    <div style="text-align: center;">
+        <h1>영어 문장을 가지고 놀아라~</h1>
+        <form id="sentence-form">
+            <input type="text" name="q" id="sentence" placeholder="평서문을 입력하세요" style="width: 300px; padding: 10px;">
+            <input type="submit" value="분석" style="padding: 10px;">
+        </form>
+        <div id="result" style="margin-top: 20px;"></div>
+    </div>
+
+    <script>
+        document.getElementById('sentence-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const sentence = document.getElementById('sentence').value;
+            const resultDiv = document.getElementById('result');
+            
+            // 입력된 문장의 동사를 추출
+            const verb = sentence.match(/(loves|hates|likes|enjoys|dislikes)/);
+            
+            if (verb && verb.length > 0) {
+                const verbText = verb[0];
+                
+                // 평서문
+                const positive = sentence;
+                
+                // 부정문
+                const negative = sentence.replace(verbText, `does not ${verbText}`);
+                
+                // 의문문
+                const question = `Does ${sentence}?`;
+                
+                // 의문 부정문
+                const questionNegative = `Does not ${sentence}?`;
+                
+                resultDiv.innerHTML = `
+                    <p>1. 평서문: ${positive}</p>
+                    <p>2. 부정문: ${negative}</p>
+                    <p>3. 의문문: ${question}</p>
+                    <p>4. 의문 부정문: ${questionNegative}</p>
+                `;
+            } else {
+                resultDiv.innerHTML = '올바른 동사를 인식할 수 없습니다.';
+            }
+        });
+    </script>
+</body>
+</html>
