@@ -16,28 +16,40 @@
     </div>
 
     <script>
+        const verbs = ['love', 'hate', 'give', 'like', 'enjoy', 'dislike', 'run', 'jump', 'swim', 'play', 'walk', 'talk', 'listen', 'watch', 'eat', 'drink', 'read', 'write', 'learn', 'study', 'work', 'rest']; // 이곳에 원하는 동사를 추가하세요.
+        const beVerbs = ['is', 'am', 'are'];
+        const thirdPersonSingular = ['he', 'she', 'it'];
+
         document.getElementById('sentence-form').addEventListener('submit', function(e) {
             e.preventDefault();
             const sentence = document.getElementById('sentence').value;
             const resultDiv = document.getElementById('result');
             
-            // 입력된 문장의 동사를 추출
-            const verb = sentence.match(/(loves|hates|likes|enjoys|dislikes)/);
-            
-            if (verb && verb.length > 0) {
-                const verbText = verb[0];
+            const verb = verbs.find(v => sentence.includes(v));
+            const beVerb = beVerbs.find(v => sentence.includes(v));
+            const subject = thirdPersonSingular.find(s => sentence.toLowerCase().startsWith(s));
+
+            if (verb) {
+                const verbText = verb;
                 
-                // 평서문
                 const positive = sentence;
+                const negative = subject ? sentence.replace(verbText, `does not ${verb}`) : sentence.replace(verbText, `do not ${verb}`);
+                const question = subject ? `Does ${sentence.replace(verbText, verb)}?` : `Do ${sentence.replace(verbText, verb)}?`;
+                const questionNegative = subject ? `Does not ${sentence.replace(verbText, verb)}?` : `Do not ${sentence.replace(verbText, verb)}?`;
                 
-                // 부정문
-                const negative = sentence.replace(verbText, `does not ${verbText}`);
+                resultDiv.innerHTML = `
+                    <p>1. 평서문: ${positive}</p>
+                    <p>2. 부정문: ${negative}</p>
+                    <p>3. 의문문: ${question}</p>
+                    <p>4. 의문 부정문: ${questionNegative}</p>
+                `;
+            } else if (beVerb) {
+                const verbText = beVerb;
                 
-                // 의문문
-                const question = `Does ${sentence}?`;
-                
-                // 의문 부정문
-                const questionNegative = `Does not ${sentence}?`;
+                const positive = sentence;
+                const negative = sentence.replace(verbText, `${verbText} not`);
+                const question = `${verbText} ${sentence.replace(verbText, '')}?`;
+                const questionNegative = `${verbText} not ${sentence.replace(verbText, '')}?`;
                 
                 resultDiv.innerHTML = `
                     <p>1. 평서문: ${positive}</p>
@@ -50,5 +62,6 @@
             }
         });
     </script>
+   
 </body>
 </html>
